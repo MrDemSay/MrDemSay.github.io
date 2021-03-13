@@ -1,3 +1,4 @@
+//for Device position
 if ('DeviceOrientationEvent' in window) {
   window.addEventListener('deviceorientation', deviceOrientationHandler, false);
 } else {
@@ -63,9 +64,9 @@ if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
 function accelerationHandler(acceleration, targetId) {
   var info, xyz = "[X, Y, Z]";
 
-  info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
-  info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
-  info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
+  info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(2));
+  info = info.replace("Y", acceleration.y && acceleration.y.toFixed(2));
+  info = info.replace("Z", acceleration.z && acceleration.z.toFixed(2));
   document.getElementById(targetId).innerHTML = info;
 }
 
@@ -81,3 +82,28 @@ function rotationHandler(rotation) {
 function intervalHandler(interval) {
   document.getElementById("moInterval").innerHTML = interval;
 }
+
+
+//for Geolocation
+var target = document.getElementById('target');
+var watchId;
+
+function appendLocation(location, verb) {
+  verb = verb || 'updated';
+  var newLocation = document.createElement('p');
+  newLocation.innerHTML = 'Location ' + verb + ': ' + location.coords.latitude + ', ' + location.coords.longitude + '';
+  target.appendChild(newLocation);
+}
+
+if ('geolocation' in navigator) {
+  document.getElementById('askButton').addEventListener('click', function () {
+    navigator.geolocation.getCurrentPosition(function (location) {
+      appendLocation(location, 'fetched');
+    });
+    watchId = navigator.geolocation.watchPosition(appendLocation);
+  });
+} else {
+  target.innerText = 'Geolocation API not supported.';
+}
+
+
