@@ -75,9 +75,9 @@ function startRecordingData() {
   function rotationHandler(rotation) {
     var info, xyz = "[X, Y, Z]";
 
-    info = xyz.replace("X", rotation.alpha && rotation.alpha.toFixed(3));
-    info = info.replace("Y", rotation.beta && rotation.beta.toFixed(3));
-    info = info.replace("Z", rotation.gamma && rotation.gamma.toFixed(3));
+    info = xyz.replace("X", rotation.alpha && rotation.alpha.toFixed(2));
+    info = info.replace("Y", rotation.beta && rotation.beta.toFixed(2));
+    info = info.replace("Z", rotation.gamma && rotation.gamma.toFixed(2));
     document.getElementById("moRotation").innerHTML = info;
   }
 
