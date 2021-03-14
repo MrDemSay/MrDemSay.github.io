@@ -16,13 +16,27 @@
 		  -webkit-perspective: 300;
 		}
 
+		#btn_container {
+			width: 100%;
+			height: 100px;
+			display: flex;
+			justify-content:  center;
+			align-items: center;
+		}
+
+		.btn {
+			width: 45%;
+			margin: 0 1% 0 1%;
+			height: 50px;
+		}
+
 	</style>
 </head>
 
 <body>
 
 	<!--Device position-->
-	<table>
+	<table cellpadding="10">
 	  <tr>
 	    <td>Left/Right [gamma]</td>
 	    <td id="doTiltLR"></td>
@@ -38,35 +52,39 @@
 	</table>
 	
 	<!--3D motion-->
-	<table>
+	<table cellpadding="10">
 		<tr>
 		  <td>API used</td>
 		  <td id="moApi"></td>
 		</tr>
 		<tr>
-		  <td>linear acceleration (excl. gravity)</td>
+		  <td>Linear acceleration (excl. gravity)</td>
 		  <td id="moAccel"></td>
 		</tr>
 		<tr>
-		  <td>acceleration incl. gravity</td>
+		  <td>Acceleration (incl. gravity)</td>
 		  <td id="moAccelGrav"></td>
 		</tr>
 		<tr>
-		  <td>rotation rate</td>
+		  <td>Rotation rate</td>
 		  <td id="moRotation"></td>
 		</tr>
 		<tr>
-		  <td>interval (ms)</td>
+		  <td>Interval (ms)</td>
 		  <td id="moInterval"></td>
 		</tr>
 	  </table>
 
 
 	  <!--Geolocation-->
-	  <button id="askButton">Ask for location</button>
-	  	<div id="target"></div>
+	  <!--<button id="askButton">Ask for location</button>
+	  	<div id="target"></div>-->
 
-
+		<div id="btn_container">
+			<button class="btn" id="btn_start" onclick="startRecordingData()">Start</button>
+			<button class="btn" id="btn_stop" onclick="stopRecordingData()">Stop</button>
+		</div>
+		  
 	<script src="main.js"></script>
 </body>
 </html>
