@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+ 
+  <title>test</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+ 
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+</head>
+	
+	<style>
+		body {
+			font-family: sans-serif;
+		}
+
+		#btn-block {
+			width: 100%;
+			height: 150px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.btn {
+			width: 45%;
+			margin-left: 1%;
+			margin-right: 1%;
+			height: 45%;
+		}
+
+		.container {
+		  perspective: 300;
+		  -webkit-perspective: 300;
+		}
+	</style>
+ 
+<body>
+
+	<table>
+	  <tr>
+	    <td>Tilt Left/Right [gamma]</td>
+	    <td id="doTiltLR"></td>
+	  </tr>
+	  <tr>
+	    <td>Tilt Front/Back [beta]</td>
+	    <td id="doTiltFB"></td>
+	  </tr>
+	  <tr>
+	    <td>Direction [alpha]</td>
+	    <td id="doDirection"></td>
+	  </tr>
+	</table>
+
+	
+
+
+	<div id="btn-block">
+		<button class="btn" id="stop-btn" onclick="startStopRecord()">Start</button>
+		<button class="btn" id="clear-btn" onclick="clearStorage()">Clear Storage</button>
+	</div>
+
+
+	<button id="askButton">Ask for location</button>
+	<div id="target"></div> <!--for Geolocation-->
+
+
+
+
+	<script type="text/javascript">
+
+		//Device position
+		if ('DeviceOrientationEvent' in window) {
+		  window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+		} else {
+		  document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
+		}
+
+		function deviceOrientationHandler (eventData) {
+		  var tiltLR = eventData.gamma;
+		  var tiltFB = eventData.beta;
+		  var dir = eventData.alpha;
+		  
+		  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+		  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+		  document.getElementById("doDirection").innerHTML = Math.round(dir);
+
+		}
+
+
+
+
+		//Geolocation
+		var target = document.getElementById('target');
+		var watchId;
+
+		function appendLocation(location, verb) {
+		  verb = verb || 'updated';
+		  var newLocation = document.createElement('p');
+		  newLocation.innerHTML = 'Location ' + verb + ': ' + location.coords.latitude + ', ' + location.coords.longitude + '';
+		  target.appendChild(newLocation);
+		}
+
+		if ('geolocation' in navigator) {
+		  document.getElementById('askButton').addEventListener('click', function () {
+		    navigator.geolocation.getCurrentPosition(function (location) {
+		      appendLocation(location, 'fetched');
+		    });
+		    watchId = navigator.geolocation.watchPosition(appendLocation);
+		  });
+		} else {
+		  target.innerText = 'Geolocation API not supported.'; 
+		}
+
+
+
+
+
+
+		
+		let btnStartStop = document.getElementById("stop-btn");
+
+		let timerId;
+		//let key = 1; //если ключ по времени (1сек)
+
+		function startStopRecord() {
+			if(timerId) {
+			    clearInterval(timerId);
+			    timerId = undefined;
+			    btnStartStop.innerText = "Start";
+			} else {
+				interval = 1000;
+
+				    timerId = setInterval(() => { 
+				    	let obj1 = {
+							latitude: location.coords.latitude,
+							longitude: location.coords.longitude
+						};
+
+						let obj2 = {
+							gamma: tiltLR,
+							beta: tiltFB ,
+							alpha: dir
+						};
+
+						let serialObj1 = JSON.stringify(obj1); //сериализуем его (ключ)
+						let serialObj2 = JSON.stringify(obj2); //сериализуем его (значение)
+						localStorage.setItem(serialObj1, serialObj2); //запишем его в хранилище по ключу
+						let returnObj = JSON.parse(localStorage.getItem(obj2)) //спарсим его обратно объект
+						//key += 1; //если ключ по времени (1сек)
+					}, interval);
+				
+				
+
+		    btnStartStop.innerText = "Stop";
+		  }
+		}
+
+
+
+		function clearStorage() {
+			localStorage.clear();
+			alert("Хранилище данных очищено.");
+		}
+
+
+		
+	</script>
+</body>
+</html>
