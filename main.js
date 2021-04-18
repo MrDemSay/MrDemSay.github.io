@@ -130,10 +130,6 @@ function startStopRecord() {
 		interval = 1000;
 
 		    timerId = setInterval(() => { 
-		    	let obj1 = {
-					latitude: key,
-					longitude: key
-				};
 
 				let obj2 = {
 					latitude: location.coords.latitude,
@@ -143,7 +139,6 @@ function startStopRecord() {
 					alpha: dir
 				};
 
-				let serialObj1 = JSON.stringify(obj1); //сериализуем его (ключ)
 				let serialObj2 = JSON.stringify(obj2); //сериализуем его (значение)
 				localStorage.setItem(i, [lat, lng, alpha, betta, gamma].join(';'));
 				let returnObj = JSON.parse(localStorage.getItem(obj2)) //спарсим его обратно объект
