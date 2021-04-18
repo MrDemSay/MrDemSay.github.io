@@ -43,13 +43,81 @@ if ('geolocation' in navigator) {
 
 
 
+//Device motion--------------------------------------------
+if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
+  document.getElementById('moApi').innerHTML = 'Generic Sensor API';
+  
+  let lastReadingTimestamp;
+  let accelerometer = new LinearAccelerationSensor();
+  accelerometer.addEventListener('reading', e => {
+    if (lastReadingTimestamp) {
+      intervalHandler(Math.round(accelerometer.timestamp - lastReadingTimestamp));
+    }
+    lastReadingTimestamp = accelerometer.timestamp
+    accelerationHandler(accelerometer, 'moAccel');
+  });
+  accelerometer.start();
+  
+  if ('GravitySensor' in window) {
+    let gravity = new GravitySensor();
+    gravity.addEventListener('reading', e => accelerationHandler(gravity, 'moAccelGrav'));
+    gravity.start();
+  }
+  
+  let gyroscope = new Gyroscope();
+  gyroscope.addEventListener('reading', e => rotationHandler({
+    alpha: gyroscope.x,
+    beta: gyroscope.y,
+    gamma: gyroscope.z
+  }));
+  gyroscope.start();
+  
+} else if ('DeviceMotionEvent' in window) {
+  document.getElementById('moApi').innerHTML = 'Device Motion API';
+  
+  var onDeviceMotion = function (eventData) {
+    accelerationHandler(eventData.acceleration, 'moAccel');
+    accelerationHandler(eventData.accelerationIncludingGravity, 'moAccelGrav');
+    rotationHandler(eventData.rotationRate);
+    intervalHandler(eventData.interval);
+  }
+  
+  window.addEventListener('devicemotion', onDeviceMotion, false);
+} else {
+  document.getElementById('moApi').innerHTML = 'No Accelerometer & Gyroscope API available';
+}
+
+function accelerationHandler(acceleration, targetId) {
+  var info, xyz = "[X, Y, Z]";
+
+  info = xyz.replace("X", acceleration.x && acceleration.x.toFixed(3));
+  info = info.replace("Y", acceleration.y && acceleration.y.toFixed(3));
+  info = info.replace("Z", acceleration.z && acceleration.z.toFixed(3));
+  document.getElementById(targetId).innerHTML = info;
+}
+
+function rotationHandler(rotation) {
+  var info, xyz = "[X, Y, Z]";
+
+  info = xyz.replace("X", rotation.alpha && rotation.alpha.toFixed(3));
+  info = info.replace("Y", rotation.beta && rotation.beta.toFixed(3));
+  info = info.replace("Z", rotation.gamma && rotation.gamma.toFixed(3));
+  document.getElementById("moRotation").innerHTML = info;
+}
+
+function intervalHandler(interval) {
+  document.getElementById("moInterval").innerHTML = interval;
+
+
+
+
 
 
 //Button actions------------
 let btnStartStop = document.getElementById("stop-btn");
 
 let timerId;
-//let key = 1; //если ключ по времени (1сек)
+let i = 1; 
 
 function startStopRecord() {
 	if(timerId) {
@@ -61,21 +129,23 @@ function startStopRecord() {
 
 		    timerId = setInterval(() => { 
 		    	let obj1 = {
-					latitude: location.coords.latitude,
-					longitude: location.coords.longitude
+					latitude: key,
+					longitude: key
 				};
 
 				let obj2 = {
+					latitude: location.coords.latitude,
+					longitude: location.coords.longitude,
 					gamma: tiltLR,
-					beta: tiltFB ,
+					beta: tiltFB,
 					alpha: dir
 				};
 
 				let serialObj1 = JSON.stringify(obj1); //сериализуем его (ключ)
 				let serialObj2 = JSON.stringify(obj2); //сериализуем его (значение)
-				localStorage.setItem(serialObj1, serialObj2); //запишем его в хранилище по ключу
+				localStorage.setItem(i, [lat, lng, alpha, betta, gamma].join(';'));
 				let returnObj = JSON.parse(localStorage.getItem(obj2)) //спарсим его обратно объект
-				//key += 1; //если ключ по времени (1сек)
+				i += 1; 
 			}, interval);
 		
 		
@@ -93,33 +163,16 @@ function clearStorage() {
 
 
 
+//Server
+ let xhr = new XMLHttpRequest();
+        let body = 'body='+JSON.stringify(localStorage);
+        xhr.open("POST", 'https://ability.9pr.ru/recieve.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(body);
+        xhr.onreadystatechange = function() {
+            console.log(xhr.responseText);
+        }
 
 
-//Save data in file
-// (function(console){
 
-//     console.save = function(data, filename){
 
-//         if(!data) {
-//             console.error('Console.save: No data')
-//             return;
-//         }
-
-//         if(!filename) filename = 'console.json'
-
-//         if(typeof data === "object"){
-//             data = JSON.stringify(data, undefined, 4)
-//         }
-
-//         var blob = new Blob([data], {type: 'text/json'}),
-//             e    = document.createEvent('MouseEvents'),
-//             a    = document.createElement('a')
-
-//         a.download = filename
-//         a.href = window.URL.createObjectURL(blob)
-//         a.dataset.downloadurl =  ['text/json', a.download, a.href].join(':')
-//         e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-//         a.dispatchEvent(e)
-//         console.save(data, [filename])
-//     }
-// })(console)
