@@ -107,6 +107,7 @@ function rotationHandler(rotation) {
 
 function intervalHandler(interval) {
   document.getElementById("moInterval").innerHTML = interval;
+}
 
 
 
