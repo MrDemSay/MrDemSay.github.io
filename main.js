@@ -1,3 +1,7 @@
+
+
+
+
 //Device position ---------------------
 if ('DeviceOrientationEvent' in window) {
   window.addEventListener('deviceorientation', deviceOrientationHandler, false);
@@ -160,16 +164,28 @@ function clearStorage() {
 
 
 
-//Server
- let xhr = new XMLHttpRequest();
-        let body = 'body='+JSON.stringify(localStorage);
-        xhr.open("POST", 'https://ability.9pr.ru/recieve.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send(body);
-        xhr.onreadystatechange = function() {
-            console.log(xhr.responseText);
-        }
+//Download
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
 
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+// Start file download.
+document.getElementById("dwn-btn").addEventListener("click", function(){
+  // Generate download of hello.txt file with some content
+  var text = localStorage.getItem(1);
+  var filename = "martrix.csv";
+  
+  download(filename, text);
+}, false);
 
 
 
