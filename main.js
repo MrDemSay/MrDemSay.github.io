@@ -42,7 +42,7 @@ if ('geolocation' in navigator) {
     watchId = navigator.geolocation.watchPosition(appendLocation);
   });
 } else {
-  target.innerText = 'Geolocation API not supported.'; 
+  target.innerText = 'Geolocation API not supported.';
 }
 
 
