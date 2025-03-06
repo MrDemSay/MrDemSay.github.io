@@ -30,27 +30,14 @@
     </div>
 
 <script type="text/javascript">
-	if ('DeviceOrientationEvent' in window) {
-	  window.addEventListener('deviceorientation', deviceOrientationHandler, false);
-	} else {
-	  document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
-	}
-
-	function deviceOrientationHandler (eventData) {
-	  var tiltLR = eventData.gamma;
-	  var tiltFB = eventData.beta;
-	  var dir = eventData.alpha;
-	  
-	  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
-	  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
-	  document.getElementById("doDirection").innerHTML = Math.round(dir);
-	}
+	
 
 
 
 
 	let count = 0;
-	let a=0, b=0;
+	let a=0;
+	let b=0;
 	let interval;
 
 	const counterDisplay = document.getElementById('counter');
@@ -60,22 +47,31 @@
 	startButton.addEventListener('click', () => {
 	    if (!interval) {
 	        interval = setInterval(() => {
-	        	a = tiltLR;
-	        	if(a != b) {
-			    	count++;
-			    	counterDisplay.textContent = count;
-			    	b = a;
-			    }
+	        	function deviceOrientationHandler (eventData) {
+				  var tiltLR = eventData.gamma;
+				  var tiltFB = eventData.beta;
+				  var dir = eventData.alpha;
+				  
+				  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+				  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+				  document.getElementById("doDirection").innerHTML = Math.round(dir);
+				  a = tiltLR;
+				  if(a != b) {
+				    	count++;
+				    	counterDisplay.textContent = count;
+				    	b = a;
+				    }
+				}
 	            //count++;
 	            //counterDisplay.textContent = count;
-	        }, 100);
+	        }, 1000);
 	    }
 	    
 	});
 
 	stopButton.addEventListener('click', () => {
 	    clearInterval(interval);
-	    interval = null;ф
+	    interval = null;
 	});
 
 </script>
