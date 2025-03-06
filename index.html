@@ -45,28 +45,25 @@
 	    document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
 	    document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
 	    document.getElementById("doDirection").innerHTML = Math.round(dir);
+	    
+	    setInterval(() => {
+		    	// Проверяем, изменились ли значения
+		    if (lastTiltLR !== tiltLR || lastTiltFB !== tiltFB || lastDir !== dir) {
+		        counter++;
+		        // Обновляем последние значения
+		        lastTiltLR = tiltLR;
+		        lastTiltFB = tiltFB;
+		        lastDir = dir;
+		    }
+		   	
+		    counterDisplay.textContent = counter;
+		}, 1000);
 
-	    // Проверяем, изменились ли значения
-	    if (lastTiltLR !== tiltLR || lastTiltFB !== tiltFB || lastDir !== dir) {
-	        counter++;
-	        
-	        
-	        // Обновляем последние значения
-	        lastTiltLR = tiltLR;
-	        lastTiltFB = tiltFB;
-	        lastDir = dir;
-	    }
+	    
 	}
 
 	// Устанавливаем обработчик события
 	window.addEventListener('deviceorientation', deviceOrientationHandler);
-
-	// Запускаем таймер для проверки изменения положения каждую секунду
-	setInterval(() => {
-	    // Здесь можно добавить дополнительную логику, если необходимо
-	    // Например, выводим текущее значение счётчика
-	    counterDisplay.textContent = counter;
-	}, 1000);
 
 
 </script>
