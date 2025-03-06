@@ -23,27 +23,54 @@
   </tr>
 </table>
 
+ <div class="container">
+        <div id="counter">0</div>
+        <button id="startBtn">Старт</button>
+        <button id="stopBtn">Стоп</button>
+    </div>
+
 <script type="text/javascript">
 	if ('DeviceOrientationEvent' in window) {
-  window.addEventListener('deviceorientation', deviceOrientationHandler, false);
-} else {
-  document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
-}
+	  window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+	} else {
+	  document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
+	}
 
-function deviceOrientationHandler (eventData) {
-  var tiltLR = eventData.gamma;
-  var tiltFB = eventData.beta;
-  var dir = eventData.alpha;
-  
-  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
-  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
-  document.getElementById("doDirection").innerHTML = Math.round(dir);
+	function deviceOrientationHandler (eventData) {
+	  var tiltLR = eventData.gamma;
+	  var tiltFB = eventData.beta;
+	  var dir = eventData.alpha;
+	  
+	  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+	  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+	  document.getElementById("doDirection").innerHTML = Math.round(dir);
+	}
 
-  var logo = document.getElementById("imgLogo");
-  logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-  logo.style.MozTransform = "rotate(" + tiltLR + "deg)";
-  logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
-}
+
+
+
+	let count = 0;
+	let a, b;
+	let interval;
+
+	const counterDisplay = document.getElementById('counter');
+	const startButton = document.getElementById('startBtn');
+	const stopButton = document.getElementById('stopBtn');
+
+	startButton.addEventListener('click', () => {
+	    if (!interval) {
+	        interval = setInterval(() => {
+	            count++;
+	            counterDisplay.textContent = count;
+	        }, 100);
+	    }
+	});
+
+	stopButton.addEventListener('click', () => {
+	    clearInterval(interval);
+	    interval = null;ф
+	});
+
 </script>
 
 
