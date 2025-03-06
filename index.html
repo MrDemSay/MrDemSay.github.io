@@ -30,49 +30,44 @@
     </div>
 
 <script type="text/javascript">
-	
+	let lastTiltLR = null;
+	let lastTiltFB = null;
+	let lastDir = null;
+	let counter = 0;
 
+	// Функция для обработки данных ориентации устройства
+	function deviceOrientationHandler(eventData) {
+	    var tiltLR = eventData.gamma;
+	    var tiltFB = eventData.beta;
+	    var dir = eventData.alpha;
 
+	    // Обновляем значения на странице
+	    document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+	    document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+	    document.getElementById("doDirection").innerHTML = Math.round(dir);
 
-
-	let count = 0;
-	let a=0;
-	let b=0;
-	let interval;
-
-	const counterDisplay = document.getElementById('counter');
-	const startButton = document.getElementById('startBtn');
-	const stopButton = document.getElementById('stopBtn');
-
-	startButton.addEventListener('click', () => {
-	    if (!interval) {
-	        interval = setInterval(() => {
-	        	function deviceOrientationHandler (eventData) {
-				  var tiltLR = eventData.gamma;
-				  var tiltFB = eventData.beta;
-				  var dir = eventData.alpha;
-				  
-				  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
-				  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
-				  document.getElementById("doDirection").innerHTML = Math.round(dir);
-				  a = tiltLR;
-				  if(a != b) {
-				    	count++;
-				    	counterDisplay.textContent = count;
-				    	b = a;
-				    }
-				}
-	            //count++;
-	            //counterDisplay.textContent = count;
-	        }, 1000);
+	    // Проверяем, изменились ли значения
+	    if (lastTiltLR !== tiltLR || lastTiltFB !== tiltFB || lastDir !== dir) {
+	        counter++;
+	        
+	        
+	        // Обновляем последние значения
+	        lastTiltLR = tiltLR;
+	        lastTiltFB = tiltFB;
+	        lastDir = dir;
 	    }
-	    
-	});
+	}
 
-	stopButton.addEventListener('click', () => {
-	    clearInterval(interval);
-	    interval = null;
-	});
+	// Устанавливаем обработчик события
+	window.addEventListener('deviceorientation', deviceOrientationHandler);
+
+	// Запускаем таймер для проверки изменения положения каждую секунду
+	setInterval(() => {
+	    // Здесь можно добавить дополнительную логику, если необходимо
+	    // Например, выводим текущее значение счётчика
+	    counterDisplay.textContent = counter;
+	}, 1000);
+
 
 </script>
 
