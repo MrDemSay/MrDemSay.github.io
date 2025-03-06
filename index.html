@@ -50,7 +50,7 @@
 
 
 	let count = 0;
-	let a, b;
+	let a=0, b=0;
 	let interval;
 
 	const counterDisplay = document.getElementById('counter');
@@ -60,15 +60,21 @@
 	startButton.addEventListener('click', () => {
 	    if (!interval) {
 	        interval = setInterval(() => {
-	            count++;
-	            counterDisplay.textContent = count;
+	        	a = tiltLR;
+	            //count++;
+	            //counterDisplay.textContent = count;
 	        }, 100);
+	    }
+	    if(a != b) {
+	    	count++;
+	    	counterDisplay.textContent = count;
+	    	b = a;
 	    }
 	});
 
 	stopButton.addEventListener('click', () => {
 	    clearInterval(interval);
-	    interval = null;
+	    interval = null;ф
 	});
 
 </script>
