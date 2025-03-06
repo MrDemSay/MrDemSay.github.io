@@ -45,7 +45,7 @@
 	    document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
 	    document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
 	    document.getElementById("doDirection").innerHTML = Math.round(dir);
-	    
+
 	    setInterval(() => {
 		    	// Проверяем, изменились ли значения
 		    if (lastTiltLR !== tiltLR || lastTiltFB !== tiltFB || lastDir !== dir) {
@@ -54,6 +54,10 @@
 		        lastTiltLR = tiltLR;
 		        lastTiltFB = tiltFB;
 		        lastDir = dir;
+		    }
+		    else {
+		    	counter--;
+		    	
 		    }
 		   	
 		    counterDisplay.textContent = counter;
