@@ -33,9 +33,9 @@
 		// Устанавливаем обработчик события
 	window.addEventListener('deviceorientation', deviceOrientationHandler);
 
-	let lastTiltLR = null;
-	let lastTiltFB = null;
-	let lastDir = null;
+	let lastTiltLR = 0;
+	let lastTiltFB = 0;
+	let lastDir = 0;
 	let counter = 0;
 
 	// Функция для обработки данных ориентации устройства
@@ -58,12 +58,10 @@
 		    if (!interval) {
 		        interval = setInterval(() => {
 				           	// Проверяем, изменились ли значения
-				    if (lastTiltLR !== tiltLR || lastTiltFB !== tiltFB || lastDir !== dir) {
+				    if (lastTiltLR !== tiltLR) {
 				        counter++;
 				        // Обновляем последние значения
 				        lastTiltLR = tiltLR;
-				        lastTiltFB = tiltFB;
-				        lastDir = dir;
 				    }
 				    else {
 				    	counter--;
@@ -79,6 +77,7 @@
 		    clearInterval(interval);
 		    interval = null;
 		});
+
 
 	    
 	}
