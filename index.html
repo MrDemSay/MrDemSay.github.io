@@ -1,101 +1,52 @@
+
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="utf-8">
- 
-  <title>test</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
- 
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Счётчик</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-	
-	<style>
-		body {
-			font-family: sans-serif;
-		}
-
-		#btn-block {
-			width: 100%;
-			height: 150px;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.btn {
-			width: 45%;
-			margin-left: 1%;
-			margin-right: 1%;
-			height: 45%;
-		}
-
-		.container {
-		  perspective: 300;
-		  -webkit-perspective: 300;
-		}
-	</style>
- 
 <body>
+<table>
+  <tr>
+    <td>Tilt Left/Right [gamma]</td>
+    <td id="doTiltLR"></td>
+  </tr>
+  <tr>
+    <td>Tilt Front/Back [beta]</td>
+    <td id="doTiltFB"></td>
+  </tr>
+  <tr>
+    <td>Direction [alpha]</td>
+    <td id="doDirection"></td>
+  </tr>
+</table>
 
-	<table>
-	  <tr>
-	    <td>Tilt Left/Right [gamma]</td>
-	    <td id="doTiltLR"></td>
-	  </tr>
-	  <tr>
-	    <td>Tilt Front/Back [beta]</td>
-	    <td id="doTiltFB"></td>
-	  </tr>
-	  <tr>
-	    <td>Direction [alpha]</td>
-	    <td id="doDirection"></td>
-	  </tr>
-	</table>
+<script type="text/javascript">
+	if ('DeviceOrientationEvent' in window) {
+  window.addEventListener('deviceorientation', deviceOrientationHandler, false);
+} else {
+  document.getElementById('logoContainer').innerText = 'Device Orientation API not supported.';
+}
 
+function deviceOrientationHandler (eventData) {
+  var tiltLR = eventData.gamma;
+  var tiltFB = eventData.beta;
+  var dir = eventData.alpha;
+  
+  document.getElementById("doTiltLR").innerHTML = Math.round(tiltLR);
+  document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
+  document.getElementById("doDirection").innerHTML = Math.round(dir);
 
-	<table cellpadding="10">
-		<tr>
-		  <td>API used</td>
-		  <td id="moApi"></td>
-		</tr>
-		<tr>
-		  <td>Linear acceleration </br> (excl. gravity)</td>
-		  <td id="moAccel"></td>
-		</tr>
-		<tr>
-		  <td>Acceleration </br> (incl. gravity)</td>
-		  <td id="moAccelGrav"></td>
-		</tr>
-		<tr>
-		  <td>Rotation rate</td>
-		  <td id="moRotation"></td>
-		</tr>
-		<tr>
-		  <td>Interval (ms)</td>
-		  <td id="moInterval"></td>
-		</tr>
-	</table>
-
-
-	<div id="btn-block">
-		<button class="btn" id="stop-btn" onclick="startStopRecord()">Start</button>
-		<button class="btn" id="clear-btn" onclick="clearStorage()">Clear Storage</button>
-	</div>
+  var logo = document.getElementById("imgLogo");
+  logo.style.webkitTransform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+  logo.style.MozTransform = "rotate(" + tiltLR + "deg)";
+  logo.style.transform = "rotate(" + tiltLR + "deg) rotate3d(1,0,0, " + (tiltFB * -1) + "deg)";
+}
+</script>
 
 
 
-
-	<button id="askButton">Ask for location</button>
-	<div id="target"></div> <!--for Geolocation-->
-
-	<input type="button" id="dwn-btn" value="Download dinamically generated text file"/>
-
-
-
-
-
-	<script type="text/javascript" src="main.js">	</script>
 </body>
 </html>
