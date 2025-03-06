@@ -30,6 +30,9 @@
     </div>
 
 <script type="text/javascript">
+		// Устанавливаем обработчик события
+	window.addEventListener('deviceorientation', deviceOrientationHandler);
+
 	let lastTiltLR = null;
 	let lastTiltFB = null;
 	let lastDir = null;
@@ -46,28 +49,43 @@
 	    document.getElementById("doTiltFB").innerHTML = Math.round(tiltFB);
 	    document.getElementById("doDirection").innerHTML = Math.round(dir);
 
-	    setInterval(() => {
-		    	// Проверяем, изменились ли значения
-		    if (lastTiltLR !== tiltLR || lastTiltFB !== tiltFB || lastDir !== dir) {
-		        counter++;
-		        // Обновляем последние значения
-		        lastTiltLR = tiltLR;
-		        lastTiltFB = tiltFB;
-		        lastDir = dir;
+	    let interval;
+		const counterDisplay = document.getElementById('counter');
+		const startButton = document.getElementById('startBtn');
+		const stopButton = document.getElementById('stopBtn');
+
+		startButton.addEventListener('click', () => {
+		    if (!interval) {
+		        interval = setInterval(() => {
+				           	// Проверяем, изменились ли значения
+				    if (lastTiltLR !== tiltLR || lastTiltFB !== tiltFB || lastDir !== dir) {
+				        counter++;
+				        // Обновляем последние значения
+				        lastTiltLR = tiltLR;
+				        lastTiltFB = tiltFB;
+				        lastDir = dir;
+				    }
+				    else {
+				    	counter--;
+
+				    }
+				   	
+				    counterDisplay.textContent = counter;
+		        }, 1000);
 		    }
-		    else {
-		    	counter--;
-		    	
-		    }
-		   	
-		    counterDisplay.textContent = counter;
-		}, 1000);
+		});
+
+		stopButton.addEventListener('click', () => {
+		    clearInterval(interval);
+		    interval = null;
+		});
 
 	    
 	}
 
-	// Устанавливаем обработчик события
-	window.addEventListener('deviceorientation', deviceOrientationHandler);
+
+
+	
 
 
 </script>
