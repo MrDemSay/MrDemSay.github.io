@@ -61,15 +61,16 @@
 	    if (!interval) {
 	        interval = setInterval(() => {
 	        	a = tiltLR;
+	        	if(a != b) {
+			    	count++;
+			    	counterDisplay.textContent = count;
+			    	b = a;
+			    }
 	            //count++;
 	            //counterDisplay.textContent = count;
 	        }, 100);
 	    }
-	    if(a != b) {
-	    	count++;
-	    	counterDisplay.textContent = count;
-	    	b = a;
-	    }
+	    
 	});
 
 	stopButton.addEventListener('click', () => {
